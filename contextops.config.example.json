@@ -1,0 +1,21 @@
+{
+  "scanPaths": [],
+  "disabledAdapters": [],
+  "customPricing": {
+    "example-model": {
+      "model": "example-model",
+      "inputPerMillion": 0.5,
+      "outputPerMillion": 1.5,
+      "currency": "USD"
+    }
+  },
+  "budgetAlerts": [
+    {
+      "scope": "daily",
+      "amountUsd": 10
+    }
+  ],
+  "privacyMode": "strict",
+  "replayRetentionDays": 90,
+  "ignoredDirectories": ["node_modules", ".git", "dist", ".next"]
+}

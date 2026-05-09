@@ -1,0 +1,53 @@
+{
+  "name": "contextops",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first workflow intelligence for AI coding tools.",
+  "type": "module",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "build": "pnpm clean && turbo run build --force",
+    "clean": "node scripts/clean.mjs",
+    "dev": "turbo run dev --parallel",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "package:check": "node scripts/package-check.mjs",
+    "pack:check": "node scripts/pack-check.mjs",
+    "release:check": "node scripts/release-check.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "typecheck": "turbo run typecheck",
+    "verify": "pnpm format:check && pnpm package:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm smoke && pnpm release:check && pnpm pack:check"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.10.7",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@inkjs/ui": "^2.0.0",
+    "@next/env": "^15.1.4",
+    "@types/react": "^19.0.7",
+    "better-sqlite3": "^11.8.1",
+    "commander": "^12.1.0",
+    "drizzle-orm": "^0.38.4",
+    "hono": "^4.6.16",
+    "ink": "^5.1.0",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.0",
+    "zod": "^3.24.1"
+  }
+}

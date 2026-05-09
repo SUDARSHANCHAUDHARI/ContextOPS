@@ -1,0 +1,29 @@
+node_modules
+.pnpm-store
+.turbo
+.next
+dist
+coverage
+*.tsbuildinfo
+graphify-out
+
+# local runtime data
+.contextops
+.contextops-smoke
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+
+# secrets and machine-local config
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# operating system/editor noise
+.DS_Store
+*.log
