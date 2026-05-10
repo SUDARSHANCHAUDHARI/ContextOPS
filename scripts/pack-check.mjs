@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -7,13 +7,16 @@ const tmp = mkdtempSync(join(tmpdir(), "contextops-pack-"));
 const failures = [];
 
 try {
+  const cliManifest = JSON.parse(
+    readFileSync(join(process.cwd(), "apps/cli/package.json"), "utf8"),
+  );
   execFileSync("pnpm", ["pack", "--pack-destination", tmp], {
     cwd: join(process.cwd(), "apps/cli"),
     encoding: "utf8",
     stdio: "pipe",
   });
 
-  const tarball = join(tmp, "contextops-cli-0.1.0.tgz");
+  const tarball = join(tmp, `contextops-cli-${cliManifest.version}.tgz`);
   const listing = execFileSync("tar", ["-tzf", tarball], { encoding: "utf8" }).trim().split("\n");
 
   for (const expected of [
