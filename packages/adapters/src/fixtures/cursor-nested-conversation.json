@@ -1,0 +1,37 @@
+{
+  "workspace": "/work/cursor-nested",
+  "conversation": {
+    "id": "cursor-nested-1",
+    "bubbles": [
+      {
+        "author": "human",
+        "text": "Open app/routes.tsx and inspect the loader retry.",
+        "createdAt": "2026-05-10T13:00:00.000Z",
+        "usage": {
+          "promptTokens": 300
+        },
+        "model": "cursor-fast"
+      },
+      {
+        "author": "ai",
+        "text": "I found the loader retry after reading app/routes.tsx.",
+        "createdAt": "2026-05-10T13:00:04.000Z",
+        "usage": {
+          "promptTokens": 720,
+          "completionTokens": 160
+        },
+        "model": "cursor-fast"
+      },
+      {
+        "role": "tool",
+        "name": "read_file",
+        "content": "read app/routes.tsx",
+        "createdAt": "2026-05-10T13:00:06.000Z",
+        "usage": {
+          "inputTokens": 120,
+          "outputTokens": 20
+        }
+      }
+    ]
+  }
+}

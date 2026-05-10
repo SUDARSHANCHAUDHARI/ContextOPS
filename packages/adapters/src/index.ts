@@ -426,7 +426,15 @@ const expandGenericRecords = (records: Record<string, unknown>[]) => {
       conversationId: value.conversationId ?? inherited.conversationId,
       model: value.model ?? value.modelName ?? inherited.model,
     };
-    const nestedKeys = ["messages", "turns", "entries", "items", "events", "conversation"];
+    const nestedKeys = [
+      "messages",
+      "bubbles",
+      "turns",
+      "entries",
+      "items",
+      "events",
+      "conversation",
+    ];
     const contentKeys = ["candidates", "parts", "content", "contents"];
     const hasNested = nestedKeys.some((key) => Array.isArray(value[key]) || isRecord(value[key]));
     const hasNestedContent = contentKeys.some(
@@ -556,7 +564,7 @@ const recordsToMessages = (
 
     return {
       id: makeId("msg", `${profile.id}:${index}:${content.slice(0, 120)}`),
-      role: roleValue(messageObject.role ?? record.role ?? record.type),
+      role: roleValue(messageObject.role ?? record.role ?? record.author ?? record.type),
       content,
       createdAt: normalizeTimestamp(
         record.timestamp ?? record.createdAt ?? record.time ?? messageObject.timestamp,
