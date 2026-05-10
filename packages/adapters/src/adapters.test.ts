@@ -25,6 +25,23 @@ describe("estimateTextTokens", () => {
     expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
   });
 
+  it("keeps malformed Claude JSONL recoverable with tool blocks and warnings", async () => {
+    const adapter = getAdapter("claude-code");
+    const path = fileURLToPath(
+      new URL("./fixtures/claude-malformed-session.jsonl", import.meta.url),
+    );
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("claude-code");
+    expect(session.projectPath).toBe("/work/claude-messy");
+    expect(session.messages).toHaveLength(5);
+    expect(session.warnings.map((warning) => warning.code)).toContain("invalid_jsonl_line");
+    expect(session.warnings.map((warning) => warning.code)).toContain("message_content_missing");
+    expect(session.tokenEstimate.source).toBe("reported");
+    expect(session.replayEvents.some((event) => event.kind === "retry")).toBe(true);
+    expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
+  });
+
   it("parses Codex-style function calls and skips token-only records", async () => {
     const adapter = getAdapter("codex-cli");
     const path = fileURLToPath(new URL("./fixtures/codex-session.jsonl", import.meta.url));
@@ -147,5 +164,22 @@ describe("estimateTextTokens", () => {
     expect(session.messages[1]?.role).toBe("assistant");
     expect(session.tokenEstimate.totalTokens).toBe(2700);
     expect(session.replayEvents.some((event) => event.kind === "retry")).toBe(true);
+  });
+
+  it("parses Gemini nested candidates and function calls", async () => {
+    const adapter = getAdapter("gemini-cli");
+    const path = fileURLToPath(
+      new URL("./fixtures/gemini-nested-candidates.json", import.meta.url),
+    );
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("gemini-cli");
+    expect(session.projectPath).toBe("/work/gemini-nested");
+    expect(session.messages).toHaveLength(3);
+    expect(session.messages[1]?.role).toBe("assistant");
+    expect(session.tokenEstimate.source).toBe("reported");
+    expect(session.tokenEstimate.totalTokens).toBe(2940);
+    expect(session.replayEvents.some((event) => event.kind === "retry")).toBe(true);
+    expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
   });
 });

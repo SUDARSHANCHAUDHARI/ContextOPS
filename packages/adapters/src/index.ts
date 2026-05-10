@@ -425,6 +425,9 @@ const expandGenericRecords = (records: Record<string, unknown>[]) => {
       sessionId: value.sessionId ?? value.id ?? inherited.sessionId,
       conversationId: value.conversationId ?? inherited.conversationId,
       model: value.model ?? value.modelName ?? inherited.model,
+      usage: value.usage ?? inherited.usage,
+      usageMetadata: value.usageMetadata ?? inherited.usageMetadata,
+      tokenUsage: value.tokenUsage ?? inherited.tokenUsage,
     };
     const nestedKeys = [
       "messages",
@@ -705,6 +708,22 @@ const contentBlockToText = (block: unknown): string => {
   if (typeof block === "string") return block;
   if (!isRecord(block)) return "";
   const type = stringifyValue(block.type);
+  if (isRecord(block.functionCall)) {
+    return [
+      `tool:${stringifyValue(block.functionCall.name) || "function_call"}`,
+      stringifyValue(block.functionCall.args ?? block.functionCall.arguments),
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
+  if (isRecord(block.functionResponse)) {
+    return [
+      `tool:${stringifyValue(block.functionResponse.name) || "function_response"}`,
+      stringifyValue(block.functionResponse.response ?? block.functionResponse.output),
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
   if (type.includes("tool") || block.name || block.input) {
     return [`tool:${stringifyValue(block.name) || type}`, stringifyValue(block.input)]
       .filter(Boolean)
@@ -778,7 +797,7 @@ const isTokenOnlyRecord = (record: Record<string, unknown>) => {
 const isMetadataOnlyRecord = (record: Record<string, unknown>) => {
   const type = stringifyValue(record.type ?? record.event);
   return (
-    /meta|session/i.test(type) &&
+    /meta|session|summary/i.test(type) &&
     !record.content &&
     !record.message &&
     !record.text &&
