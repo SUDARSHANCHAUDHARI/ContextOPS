@@ -15,7 +15,20 @@ For a clean verification pass:
 pnpm verify
 ```
 
-## 2. Detect Local Tools
+## 2. Load A Safe Demo Store
+
+Use the built-in synthetic dataset when you want the CLI and dashboard to show useful workflow intelligence before scanning real logs:
+
+```bash
+CONTEXTOPS_HOME=.contextops-demo pnpm cli demo --reset
+CONTEXTOPS_HOME=.contextops-demo pnpm cli summary
+CONTEXTOPS_HOME=.contextops-demo pnpm cli waste
+CONTEXTOPS_HOME=.contextops-demo pnpm cli sessions
+```
+
+The demo sessions are generated locally and do not contain private tool logs.
+
+## 3. Detect Local Tools
 
 ```bash
 pnpm cli tools
@@ -23,7 +36,7 @@ pnpm cli tools
 
 ContextOps checks for supported local AI coding tools and records detection results in local SQLite storage.
 
-## 3. Scan Sessions
+## 4. Scan Sessions
 
 Scan the default local locations:
 
@@ -41,7 +54,7 @@ CONTEXTOPS_HOME=.contextops-demo pnpm cli scan --provider cursor --path ./exampl
 
 Parsers are defensive by design. Malformed records should produce warnings instead of crashing the scan.
 
-## 4. Review Workflow Intelligence
+## 5. Review Workflow Intelligence
 
 ```bash
 CONTEXTOPS_HOME=.contextops-demo pnpm cli summary
@@ -51,7 +64,7 @@ CONTEXTOPS_HOME=.contextops-demo pnpm cli waste
 
 Use these commands to inspect token estimates, cost estimates, expensive sessions, repeated file reads, retry chains, context bloat, and other workflow inefficiencies.
 
-## 5. Replay A Session
+## 6. Replay A Session
 
 ```bash
 pnpm cli replay ./examples/sample-logs/codex-session.jsonl
@@ -59,7 +72,7 @@ pnpm cli replay ./examples/sample-logs/codex-session.jsonl
 
 Replay output is built from chronological events: prompts, tool calls, retries, context growth, file reads, and model changes where available.
 
-## 6. Open The Dashboard
+## 7. Open The Dashboard
 
 ```bash
 pnpm --filter @contextops/web dev
@@ -67,7 +80,7 @@ pnpm --filter @contextops/web dev
 
 Then open the printed localhost URL. The dashboard reads local SQLite data and exposes overview, session, replay, project, tool, waste, and settings views.
 
-## 7. Configure Scan Behavior
+## 8. Configure Scan Behavior
 
 Copy the example config when you need custom paths or privacy controls:
 

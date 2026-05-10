@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { writeFileSync } from "node:fs";
-import { createAdapters, getAdapter } from "@contextops/adapters";
+import { createAdapters, estimateTextTokens, getAdapter } from "@contextops/adapters";
 import { analyzeSession } from "@contextops/analyzer";
 import { loadConfig } from "@contextops/config";
-import type { ParseWarning, ToolId } from "@contextops/core";
-import { nowIso } from "@contextops/core";
+import type { ParsedSession, ParseWarning, ToolId } from "@contextops/core";
+import { makeId, nowIso } from "@contextops/core";
 import { estimateSessionCost } from "@contextops/pricing";
 import { buildReplayTimeline, summarizeReplay } from "@contextops/replay";
 import type { ReportFilters } from "@contextops/storage";
@@ -105,6 +105,44 @@ program
     print(`Estimated cost: $${Number(summary.estimatedUsd ?? 0).toFixed(4)}`);
     print(`Waste patterns: ${summary.wastePatternCount ?? 0}`);
     printFirstRunHint(Number(summary.sessionCount ?? 0));
+    store.close();
+  });
+
+program
+  .command("demo")
+  .description(
+    "Load safe synthetic sessions so summaries, waste, and replay have data immediately.",
+  )
+  .option("--reset", "Clear local ContextOps data before loading demo sessions")
+  .action((options: { reset?: boolean }) => {
+    const store = new ContextOpsStore();
+    if (options.reset) store.reset();
+
+    const sessions = createDemoSessions();
+    for (const session of sessions) {
+      const analysis = analyzeSession(session);
+      const costs = estimateSessionCost(session);
+      store.saveSession(session, costs, analysis.patterns);
+    }
+
+    const scanId = store.saveScanRun({
+      startedAt: sessions[0]?.startedAt ?? nowIso(),
+      completedAt: nowIso(),
+      scannedPaths: ["contextops://synthetic-demo"],
+      warnings: [
+        {
+          code: "synthetic_demo",
+          message: "Demo sessions are generated fixtures and do not contain private local logs.",
+          severity: "info",
+        },
+      ],
+    });
+
+    print(`Loaded ${sessions.length} demo sessions into ${store.databasePath()}`);
+    print(`Scan run: ${scanId}`);
+    print(
+      "Next: contextops summary, contextops waste, contextops sessions, contextops replay <session-id>",
+    );
     store.close();
   });
 
@@ -374,6 +412,219 @@ const inferAdapterForPath = (path: string) => {
   if (lower.includes("gemini")) return getAdapter("gemini-cli");
   if (lower.includes("claude")) return getAdapter("claude-code");
   return undefined;
+};
+
+const createDemoSessions = (): ParsedSession[] => {
+  const base = Date.parse("2026-01-15T10:00:00.000Z");
+  const at = (minutes: number) => new Date(base + minutes * 60_000).toISOString();
+
+  return [
+    buildDemoSession({
+      idSeed: "codex-demo-retry-loop",
+      toolId: "codex-cli",
+      projectPath: "/demo/contextops-api",
+      sourcePath: "contextops://synthetic-demo/codex-retry-loop",
+      startedAt: at(0),
+      endedAt: at(18),
+      model: "gpt-5.4",
+      messages: [
+        {
+          role: "user",
+          content:
+            "Fix the failing storage migration and inspect packages/storage/src/index.ts before editing.",
+          minutes: 0,
+        },
+        {
+          role: "tool",
+          content: "read packages/storage/src/index.ts",
+          minutes: 1,
+          toolName: "read_file",
+          filePath: "packages/storage/src/index.ts",
+        },
+        {
+          role: "tool",
+          content: "read packages/storage/src/index.ts",
+          minutes: 2,
+          toolName: "read_file",
+          filePath: "packages/storage/src/index.ts",
+        },
+        {
+          role: "assistant",
+          content:
+            "The migration still failed with a retention cleanup error, so this retry needs a narrower patch.",
+          minutes: 4,
+        },
+        {
+          role: "user",
+          content:
+            "Fix the failing storage migration and inspect packages/storage/src/index.ts before editing.",
+          minutes: 7,
+        },
+        {
+          role: "tool",
+          content: "read packages/storage/src/index.ts",
+          minutes: 8,
+          toolName: "read_file",
+          filePath: "packages/storage/src/index.ts",
+        },
+        {
+          role: "user",
+          content:
+            "Fix the failing storage migration and inspect packages/storage/src/index.ts before editing.",
+          minutes: 11,
+        },
+        {
+          role: "tool",
+          content: "read packages/storage/src/index.ts",
+          minutes: 12,
+          toolName: "read_file",
+          filePath: "packages/storage/src/index.ts",
+        },
+        {
+          role: "assistant",
+          content:
+            "Retry completed after the failed migration path was narrowed, but the same file was read four times.",
+          minutes: 17,
+        },
+      ],
+    }),
+    buildDemoSession({
+      idSeed: "cursor-demo-context-bloat",
+      toolId: "cursor",
+      projectPath: "/demo/contextops-web",
+      sourcePath: "contextops://synthetic-demo/cursor-context-bloat",
+      startedAt: at(30),
+      endedAt: at(64),
+      model: "claude-3.5-sonnet",
+      messages: [
+        {
+          role: "user",
+          content:
+            "Build the waste dashboard, include all prior notes, every route, every CSS rule, and the whole schema for context.",
+          minutes: 30,
+        },
+        {
+          role: "tool",
+          content: "read apps/web/src/app/waste/page.tsx",
+          minutes: 32,
+          toolName: "read_file",
+          filePath: "apps/web/src/app/waste/page.tsx",
+        },
+        {
+          role: "tool",
+          content: "read apps/web/src/app/globals.css",
+          minutes: 34,
+          toolName: "read_file",
+          filePath: "apps/web/src/app/globals.css",
+        },
+        {
+          role: "assistant",
+          content:
+            "Context grew from a focused page change into a broad dashboard pass with repeated schema and style references. ".repeat(
+              90,
+            ),
+          minutes: 49,
+        },
+        {
+          role: "user",
+          content:
+            "Now also compare it with sessions, replay, tools, projects, and settings pages.",
+          minutes: 52,
+        },
+        {
+          role: "assistant",
+          content:
+            "The work finished, but the replay shows a large context expansion compared with the final UI delta.",
+          minutes: 63,
+        },
+      ],
+    }),
+  ];
+};
+
+type DemoMessageInput = {
+  role: ParsedSession["messages"][number]["role"];
+  content: string;
+  minutes: number;
+  toolName?: string;
+  filePath?: string;
+};
+
+const buildDemoSession = (input: {
+  idSeed: string;
+  toolId: ToolId;
+  projectPath: string;
+  sourcePath: string;
+  startedAt: string;
+  endedAt: string;
+  model: string;
+  messages: DemoMessageInput[];
+}): ParsedSession => {
+  const sessionId = makeId("session", input.idSeed);
+  const messages = input.messages.map((message, index) => {
+    const tokenEstimate = estimateTextTokens(message.content);
+    return {
+      id: makeId("msg", `${sessionId}:${index}:${message.content}`),
+      role: message.role,
+      content: message.content,
+      createdAt: new Date(Date.parse(input.startedAt) + message.minutes * 60_000).toISOString(),
+      tokenEstimate,
+      model: message.role === "tool" ? undefined : input.model,
+      toolName: message.toolName,
+      metadata: message.filePath ? { filePath: message.filePath } : undefined,
+    };
+  });
+
+  const replayEvents = messages.map((message, index) => ({
+    id: makeId("event", `${sessionId}:${index}:${message.content}`),
+    sessionId,
+    kind:
+      message.role === "user"
+        ? ("prompt" as const)
+        : message.role === "tool" && message.toolName === "read_file"
+          ? ("file_read" as const)
+          : message.role === "tool"
+            ? ("tool_call" as const)
+            : ("assistant_response" as const),
+    timestamp: message.createdAt,
+    label:
+      message.role === "tool" ? (message.toolName ?? "tool call") : message.content.slice(0, 80),
+    detail: message.content,
+    tokens: message.tokenEstimate.totalTokens,
+    filePath:
+      typeof message.metadata?.filePath === "string" ? message.metadata.filePath : undefined,
+    model: message.model,
+  }));
+
+  const totalTokens = messages.reduce((sum, message) => sum + message.tokenEstimate.totalTokens, 0);
+
+  return {
+    id: sessionId,
+    toolId: input.toolId,
+    projectPath: input.projectPath,
+    startedAt: input.startedAt,
+    endedAt: input.endedAt,
+    sourcePath: input.sourcePath,
+    sourceFormat: "jsonl",
+    messages,
+    replayEvents,
+    tokenEstimate: {
+      inputTokens: totalTokens,
+      outputTokens: 0,
+      totalTokens,
+      confidence: 0.7,
+      source: "estimated",
+    },
+    warnings: [
+      {
+        code: "synthetic_demo",
+        message: "Synthetic demo session for onboarding and screenshots.",
+        severity: "info",
+        path: input.sourcePath,
+      },
+    ],
+    metadata: { synthetic: true },
+  };
 };
 
 try {
