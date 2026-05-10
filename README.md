@@ -21,6 +21,30 @@ pnpm install
 pnpm build
 ```
 
+## Quick Start
+
+Run the local verification suite:
+
+```bash
+pnpm verify
+```
+
+Inspect available AI coding tool data:
+
+```bash
+pnpm --filter @contextops/cli dev -- tools
+pnpm --filter @contextops/cli dev -- scan
+pnpm --filter @contextops/cli dev -- summary
+```
+
+Launch the local dashboard:
+
+```bash
+pnpm --filter @contextops/web dev
+```
+
+The dashboard runs against local project data only. No authentication, cloud account, or API key is required.
+
 ## Commands
 
 ```bash
@@ -81,7 +105,7 @@ ContextOps is a Turborepo monorepo:
 
 ## Screenshots
 
-Screenshots will live here once the dashboard has real local data:
+Screenshots will live here once launch captures are finalized:
 
 - Overview dashboard
 - Session explorer
@@ -103,15 +127,14 @@ ContextOps defaults to:
 
 ## Roadmap
 
-- Hardening adapters with more tool-specific fixtures.
-- Rich replay detail pages and timeline navigation.
-- Context growth visualizations.
-- IDE-native overlays.
-- Team analytics with opt-in sync.
-- Prompt optimization recommendations.
-- Workflow graph visualization.
-- Governance and anomaly detection.
+- v0.1.0: local scan, parsing, storage, CLI summaries, replay timelines, waste detection, dashboard scaffold.
+- v0.2.0: stronger adapter fixtures, richer replay navigation, project rollups, model switching analytics, and budget alerts.
+- v0.3.0: IDE-native overlays, prompt optimization recommendations, workflow graph visualization, and opt-in team analytics.
 
 ## Contributing
 
 Contributions must follow the clean-room rules in `docs/CLEAN_ROOM_RULES.md`. Do not copy code, wording, UI layouts, architecture diagrams, naming systems, or branding from other AI observability or coding tools.
+
+## Launch Status
+
+ContextOps is preparing for a v0.1.0 developer preview. The current milestone is intended for local-first evaluation, adapter hardening, and workflow intelligence feedback before broader distribution.
