@@ -151,6 +151,7 @@ See `docs/LAUNCH_CHECKLIST.md` for the current verification and release checklis
 
 - Use `docs/DEMO_SCRIPT.md` for a short synthetic demo.
 - Use `docs/BETA_FEEDBACK.md` to report parser drift, confusing replay output, or workflow intelligence misses without sharing private logs.
+- Use `docs/PARSER_FIXTURE_GUIDE.md` when creating safe, minimal parser fixtures.
 
 ## Contributing
 
