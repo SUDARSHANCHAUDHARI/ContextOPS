@@ -104,6 +104,7 @@ program
     print(`Estimated tokens: ${(summary.totalTokens ?? 0).toLocaleString()}`);
     print(`Estimated cost: $${Number(summary.estimatedUsd ?? 0).toFixed(4)}`);
     print(`Waste patterns: ${summary.wastePatternCount ?? 0}`);
+    printFirstRunHint(Number(summary.sessionCount ?? 0));
     store.close();
   });
 
@@ -118,10 +119,12 @@ program
   .option("-l, --limit <number>", "Maximum sessions to show", "30")
   .action((options: ReportOptions & { limit?: string }) => {
     const store = new ContextOpsStore();
-    for (const row of store.listSessions({
+    const rows = store.listSessions({
       ...toFilters(options),
       limit: numberOption(options.limit, 30),
-    }) as Record<string, unknown>[]) {
+    }) as Record<string, unknown>[];
+    if (rows.length === 0) printFirstRunHint(0);
+    for (const row of rows) {
       print(
         `${row.started_at} ${row.tool_id} ${row.total_tokens} tokens $${Number(row.estimatedUsd ?? 0).toFixed(4)} ${row.id}`,
       );
@@ -197,7 +200,12 @@ program
   .description("List waste patterns.")
   .action(() => {
     const store = new ContextOpsStore();
-    for (const row of store.listWaste(50) as Record<string, unknown>[]) {
+    const rows = store.listWaste(50) as Record<string, unknown>[];
+    if (rows.length === 0) {
+      print("No waste patterns stored yet.");
+      print("Run contextops scan, then inspect contextops replay or contextops report.");
+    }
+    for (const row of rows) {
       print(`[${row.severity}] ${row.title}: ${row.explanation}`);
     }
     store.close();
@@ -288,6 +296,12 @@ program
   });
 
 const print = (line: string) => process.stdout.write(`${line}\n`);
+
+const printFirstRunHint = (sessionCount: number) => {
+  if (sessionCount > 0) return;
+  print("No sessions stored yet. Run contextops tools, then contextops scan.");
+  print("Tip: set CONTEXTOPS_HOME=.contextops to keep the SQLite database in this project.");
+};
 
 type ReportOptions = {
   provider?: string;

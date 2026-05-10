@@ -14,8 +14,8 @@
 
 ## Phase 2
 
-- Tool-specific parser fixtures.
-- Replay viewer with frame navigation.
+- Tool-specific parser fixtures for all initial adapters.
+- Replay viewer with frame navigation, metrics, evidence, and root-cause context.
 - Project rollups.
 - Model switching analytics.
 - Budget alerts.

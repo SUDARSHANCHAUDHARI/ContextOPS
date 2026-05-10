@@ -178,6 +178,35 @@ a {
   gap: 12px;
 }
 
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.severity-high {
+  color: var(--bad);
+}
+
+.severity-medium {
+  color: var(--warn);
+}
+
+.severity-low {
+  color: var(--good);
+}
+
+.recommendation {
+  color: var(--accent);
+}
+
+.evidence {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
 .mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;

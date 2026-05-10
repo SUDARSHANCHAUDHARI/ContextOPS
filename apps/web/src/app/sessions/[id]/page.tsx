@@ -1,4 +1,4 @@
-import { getSessionData } from "../../data";
+import { getSessionData, parseEvidence, recommendationForWaste } from "../../data";
 
 export const dynamic = "force-dynamic";
 
@@ -56,11 +56,25 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
         {waste.length === 0 ? (
           <p className="warn">No waste patterns recorded for this session.</p>
         ) : null}
-        {waste.map((item) => (
-          <p key={String(item.id)}>
-            [{String(item.severity)}] {String(item.title)}
-          </p>
-        ))}
+        <div className="stack">
+          {waste.map((item) => (
+            <article key={String(item.id)}>
+              <div className="row">
+                <span className={`pill severity severity-${String(item.severity)}`}>
+                  {String(item.severity)}
+                </span>
+                <strong>{String(item.title)}</strong>
+              </div>
+              <p>{String(item.explanation)}</p>
+              <p className="recommendation">{recommendationForWaste(item.kind)}</p>
+              <ul className="evidence">
+                {parseEvidence(item.evidence_json).map((entry) => (
+                  <li key={entry}>{entry}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
       </section>
     </>
   );

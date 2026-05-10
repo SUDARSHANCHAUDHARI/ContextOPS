@@ -1,0 +1,21 @@
+{
+  "conversationId": "cursor-json-1",
+  "workspace": "/work/cursor-json",
+  "messages": [
+    {
+      "role": "human",
+      "text": "Open app/routes.tsx and check why navigation retries.",
+      "createdAt": "2026-05-09T09:00:00.000Z",
+      "inputTokens": 260,
+      "model": "cursor-small"
+    },
+    {
+      "role": "ai",
+      "text": "I read app/routes.tsx and found duplicate route registration.",
+      "createdAt": "2026-05-09T09:00:07.000Z",
+      "inputTokens": 600,
+      "outputTokens": 140,
+      "model": "cursor-small"
+    }
+  ]
+}
