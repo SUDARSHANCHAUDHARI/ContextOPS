@@ -2,7 +2,7 @@
 
 All notable ContextOps changes are tracked here.
 
-## Unreleased
+## 0.1.2 - Product Surface Polish
 
 ### Added
 
