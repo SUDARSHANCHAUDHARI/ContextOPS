@@ -2,7 +2,7 @@
 
 All notable ContextOps changes are tracked here.
 
-## Unreleased
+## 0.1.3 - Quickstart And Examples
 
 ### Added
 
