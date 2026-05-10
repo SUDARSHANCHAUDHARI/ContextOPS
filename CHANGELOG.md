@@ -22,7 +22,7 @@ All notable ContextOps changes are tracked here.
 - This release is a developer preview. Adapter behavior should be validated against real local session folders before a wider launch.
 - ContextOps does not proxy model traffic, require API keys, or upload local session data by default.
 
-## Unreleased
+## 0.1.1 - Workflow Intelligence Hardening
 
 ### Added
 
