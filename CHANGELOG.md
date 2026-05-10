@@ -9,6 +9,7 @@ All notable ContextOps changes are tracked here.
 - Beta feedback guide for privacy-safe parser drift and workflow intelligence reports.
 - Demo script for presenting ContextOps with synthetic fixtures and a throwaway local database.
 - Parser fixture guide for safe, minimal adapter drift reproductions.
+- Adapter support matrix describing preview coverage, parser contracts, replay signals, and known limits.
 
 ## 0.1.3 - Quickstart And Examples
 
