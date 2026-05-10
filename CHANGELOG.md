@@ -2,6 +2,14 @@
 
 All notable ContextOps changes are tracked here.
 
+## Unreleased
+
+### Added
+
+- Quickstart documentation with root-level CLI commands and local demo-store guidance.
+- Synthetic example logs and representative CLI output for onboarding, screenshots, and parser smoke checks.
+- Launch checklist updates for preview verification with safe example fixtures.
+
 ## 0.1.2 - Product Surface Polish
 
 ### Added
