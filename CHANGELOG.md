@@ -4,6 +4,14 @@ All notable ContextOps changes are tracked here.
 
 ## Unreleased
 
+### Added
+
+- Codex malformed JSONL and Cursor nested conversation fixtures for adapter drift hardening.
+
+### Changed
+
+- Generic session parsing now descends into nested conversation bubbles and normalizes author role aliases.
+
 ## 0.1.4 - Demo Onboarding And Beta Docs
 
 ### Added

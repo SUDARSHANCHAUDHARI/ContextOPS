@@ -48,6 +48,24 @@ describe("estimateTextTokens", () => {
     expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
   });
 
+  it("keeps malformed Codex JSONL recoverable with actionable warnings", async () => {
+    const adapter = getAdapter("codex-cli");
+    const path = fileURLToPath(
+      new URL("./fixtures/codex-malformed-session.jsonl", import.meta.url),
+    );
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("codex-cli");
+    expect(session.projectPath).toBe("/work/codex-messy");
+    expect(session.messages).toHaveLength(6);
+    expect(session.warnings.map((warning) => warning.code)).toContain("invalid_jsonl_line");
+    expect(session.warnings.map((warning) => warning.code)).toContain("message_content_missing");
+    expect(session.tokenEstimate.source).toBe("reported");
+    expect(session.tokenEstimate.confidence).toBeGreaterThanOrEqual(0.75);
+    expect(session.replayEvents.some((event) => event.kind === "retry")).toBe(true);
+    expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
+  });
+
   it("scans Cursor SQLite key-value records read-only", async () => {
     const adapter = getAdapter("cursor");
     const dir = mkdtempSync(join(tmpdir(), "contextops-cursor-"));
@@ -98,6 +116,23 @@ describe("estimateTextTokens", () => {
     expect(session.messages).toHaveLength(2);
     expect(session.messages[0]?.role).toBe("user");
     expect(session.messages[1]?.role).toBe("assistant");
+    expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
+  });
+
+  it("parses nested Cursor conversation bubbles with author aliases", async () => {
+    const adapter = getAdapter("cursor");
+    const path = fileURLToPath(
+      new URL("./fixtures/cursor-nested-conversation.json", import.meta.url),
+    );
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("cursor");
+    expect(session.projectPath).toBe("/work/cursor-nested");
+    expect(session.messages).toHaveLength(3);
+    expect(session.messages[0]?.role).toBe("user");
+    expect(session.messages[1]?.role).toBe("assistant");
+    expect(session.messages[2]?.role).toBe("tool");
+    expect(session.tokenEstimate.source).toBe("reported");
     expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
   });
 

@@ -1,0 +1,9 @@
+{"type":"session","cwd":"/work/codex-messy","model":"gpt-5.4"}
+{"role":"user","content":"Open src/server.ts and explain why the test failed.","timestamp":"2026-05-10T12:00:00.000Z","usage":{"input_tokens":420,"output_tokens":0},"model":"gpt-5.4"}
+{"event":"token","tokens":14}
+{"role":"tool","name":"exec_command","arguments":"cat src/server.ts","timestamp":"2026-05-10T12:00:03.000Z","usage":{"input_tokens":80,"output_tokens":20}}
+{"role":"assistant","content":"The failure is probably a retry path in src/server.ts after the command error.","timestamp":"2026-05-10T12:00:09.000Z","usage":{"input_tokens":500,"output_tokens":190},"model":"gpt-5.4"}
+{"role":"assistant","timestamp":"2026-05-10T12:00:10.000Z"}
+{"role":"user","content":"Try again after the failed command.","timestamp":"2026-05-10T12:00:12.000Z","usage":{"total_tokens":260},"model":"gpt-5.4"}
+{"role":"assistant","content":"Recovered by narrowing the retry to src/server.ts.","timestamp":"2026-05-10T12:00:18.000Z","usage":{"input_tokens":330,"output_tokens":110},"model":"gpt-5.4"}
+{this is not json
