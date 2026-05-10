@@ -5,7 +5,7 @@ This checklist is for the v0.1.0 developer preview launch.
 ## Required Before Public Launch
 
 - [ ] Confirm repository visibility and package name strategy.
-- [ ] Choose and add a license before making the repository broadly public.
+- [x] Choose and add a license before making the repository broadly public.
 - [ ] Capture dashboard and TUI screenshots with safe demo data.
 - [ ] Re-run `pnpm install --frozen-lockfile`.
 - [ ] Re-run `pnpm verify`.

@@ -1,0 +1,39 @@
+name: Adapter request
+description: Request support or improvements for an AI coding tool adapter.
+title: "[Adapter]: "
+labels: ["adapter"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste private prompts, secrets, file contents, or raw session logs. Describe formats with redacted or synthetic examples.
+  - type: input
+    id: tool
+    attributes:
+      label: Tool
+      description: Which AI coding tool should ContextOps support or improve?
+      placeholder: Claude Code, Codex CLI, Cursor, Gemini CLI, Windsurf, Copilot, OpenCode
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Local artifact shape
+      description: Describe where the tool stores local sessions and what format it uses.
+    validations:
+      required: true
+  - type: textarea
+    id: signals
+    attributes:
+      label: Workflow signals
+      description: Which events should ContextOps extract for replay or waste analysis?
+    validations:
+      required: false
+  - type: textarea
+    id: sample
+    attributes:
+      label: Redacted sample
+      description: Optional synthetic or redacted sample.
+      render: json
+    validations:
+      required: false
