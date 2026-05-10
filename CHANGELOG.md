@@ -4,6 +4,8 @@ All notable ContextOps changes are tracked here.
 
 ## Unreleased
 
+## 0.1.4 - Demo Onboarding And Beta Docs
+
 ### Added
 
 - Beta feedback guide for privacy-safe parser drift and workflow intelligence reports.

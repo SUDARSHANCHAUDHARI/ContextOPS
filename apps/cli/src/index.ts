@@ -16,7 +16,7 @@ const program = new Command();
 program
   .name("contextops")
   .description("Local-first workflow intelligence for AI coding sessions.")
-  .version("0.1.3");
+  .version("0.1.4");
 
 program
   .command("tools")
