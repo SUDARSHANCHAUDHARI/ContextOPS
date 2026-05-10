@@ -60,6 +60,22 @@ try {
   );
   if (!scan.includes("Scan run:")) throw new Error("CLI scan did not record a scan run");
 
+  const demo = execFileSync("node", [cliPath, "demo", "--reset"], {
+    encoding: "utf8",
+    env: cliEnv,
+  });
+  if (!demo.includes("Loaded 2 demo sessions")) {
+    throw new Error("CLI demo did not load synthetic sessions");
+  }
+
+  const demoSummary = execFileSync("node", [cliPath, "summary"], {
+    encoding: "utf8",
+    env: cliEnv,
+  });
+  if (!demoSummary.includes("Sessions: 2")) {
+    throw new Error("CLI summary did not include demo sessions");
+  }
+
   const retention = execFileSync("node", [cliPath, "retention", "--days", "3650"], {
     encoding: "utf8",
     env: cliEnv,

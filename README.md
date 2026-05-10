@@ -31,6 +31,14 @@ Run the local verification suite:
 pnpm verify
 ```
 
+Load a safe synthetic demo store:
+
+```bash
+CONTEXTOPS_HOME=.contextops-demo pnpm cli demo --reset
+CONTEXTOPS_HOME=.contextops-demo pnpm cli summary
+CONTEXTOPS_HOME=.contextops-demo pnpm cli waste
+```
+
 Inspect available AI coding tool data:
 
 ```bash
@@ -60,6 +68,7 @@ The dashboard runs against local project data only. No authentication, cloud acc
 ```bash
 contextops tools
 contextops scan
+contextops demo
 contextops summary
 contextops sessions
 contextops replay ./path/to/session.jsonl

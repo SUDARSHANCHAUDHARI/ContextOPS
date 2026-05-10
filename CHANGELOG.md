@@ -10,6 +10,7 @@ All notable ContextOps changes are tracked here.
 - Demo script for presenting ContextOps with synthetic fixtures and a throwaway local database.
 - Parser fixture guide for safe, minimal adapter drift reproductions.
 - Adapter support matrix describing preview coverage, parser contracts, replay signals, and known limits.
+- CLI `demo` command that seeds safe synthetic sessions for first-run summaries, waste analysis, and replay exploration.
 
 ## 0.1.3 - Quickstart And Examples
 
