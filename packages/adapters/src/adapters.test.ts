@@ -87,4 +87,30 @@ describe("estimateTextTokens", () => {
     expect(result.sessions[0]?.messages).toHaveLength(2);
     expect(result.sessions[0]?.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
   });
+
+  it("parses Cursor JSON exports with human and ai role aliases", async () => {
+    const adapter = getAdapter("cursor");
+    const path = fileURLToPath(new URL("./fixtures/cursor-session.json", import.meta.url));
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("cursor");
+    expect(session.projectPath).toBe("/work/cursor-json");
+    expect(session.messages).toHaveLength(2);
+    expect(session.messages[0]?.role).toBe("user");
+    expect(session.messages[1]?.role).toBe("assistant");
+    expect(session.replayEvents.some((event) => event.kind === "file_read")).toBe(true);
+  });
+
+  it("parses Gemini CLI nested turns and usage metadata", async () => {
+    const adapter = getAdapter("gemini-cli");
+    const path = fileURLToPath(new URL("./fixtures/gemini-session.json", import.meta.url));
+    const session = await adapter!.parseSession(path);
+
+    expect(session.toolId).toBe("gemini-cli");
+    expect(session.projectPath).toBe("/work/gemini-app");
+    expect(session.messages).toHaveLength(3);
+    expect(session.messages[1]?.role).toBe("assistant");
+    expect(session.tokenEstimate.totalTokens).toBe(2700);
+    expect(session.replayEvents.some((event) => event.kind === "retry")).toBe(true);
+  });
 });

@@ -122,6 +122,7 @@ export interface WastePattern {
   severity: "low" | "medium" | "high";
   title: string;
   explanation: string;
+  recommendation?: string;
   evidence: string[];
   estimatedWastedTokens: number;
   confidence: number;

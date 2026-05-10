@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectPromptLoops } from "./index.js";
+import { detectPromptLoops, recommendWasteAction } from "./index.js";
 import type { ParsedSession } from "@contextops/core";
 
 describe("detectPromptLoops", () => {
@@ -35,5 +35,10 @@ describe("detectPromptLoops", () => {
     } satisfies ParsedSession;
 
     expect(detectPromptLoops(session)).toHaveLength(1);
+    expect(detectPromptLoops(session)[0]?.recommendation).toContain("acceptance criteria");
+  });
+
+  it("returns actionable recommendations by waste kind", () => {
+    expect(recommendWasteAction("retry_chain")).toContain("failing command");
   });
 });

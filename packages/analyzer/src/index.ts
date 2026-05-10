@@ -183,9 +183,10 @@ const pattern = (
   severity,
   title,
   explanation: explain(kind),
+  recommendation: recommend(kind),
   evidence,
   estimatedWastedTokens,
-  confidence: 0.7,
+  confidence: confidenceFor(kind, estimatedWastedTokens, evidence),
 });
 
 const explain = (kind: WastePattern["kind"]) =>
@@ -201,6 +202,35 @@ const explain = (kind: WastePattern["kind"]) =>
     high_cost_session: "Large sessions deserve review even when they eventually succeed.",
     tool_overuse: "Dense tool-call sequences can indicate unfocused exploration.",
   })[kind];
+
+export const recommendWasteAction = (kind: WastePattern["kind"]) => recommend(kind);
+
+const recommend = (kind: WastePattern["kind"]) =>
+  ({
+    prompt_loop:
+      "Pause the loop, restate the acceptance criteria, and ask the agent for one bounded plan before another edit.",
+    repeated_file_read:
+      "Keep a compact file summary in the working prompt or pin the file once instead of re-reading it every turn.",
+    context_bloat:
+      "Split the session at the decision boundary and carry forward only the current plan, touched files, and unresolved errors.",
+    retry_chain:
+      "Capture the failing command, error, and intended fix in one prompt before asking for another attempt.",
+    high_cost_session:
+      "Review the replay timeline for the largest context jumps and move finished work into a fresh session.",
+    tool_overuse:
+      "Ask the agent to name the next three files or commands before continuing broad exploration.",
+  })[kind];
+
+const confidenceFor = (
+  kind: WastePattern["kind"],
+  estimatedWastedTokens: number,
+  evidence: string[],
+) => {
+  const evidenceBoost = Math.min(0.18, evidence.length * 0.04);
+  const tokenBoost = Math.min(0.14, Math.log10(estimatedWastedTokens + 10) / 20);
+  const base = kind === "high_cost_session" ? 0.62 : 0.68;
+  return Math.min(0.92, Number((base + evidenceBoost + tokenBoost).toFixed(2)));
+};
 
 const normalize = (value: string) => value.toLowerCase().replace(/\s+/g, " ").trim();
 const wasted = (messages: ParsedMessage[]) =>

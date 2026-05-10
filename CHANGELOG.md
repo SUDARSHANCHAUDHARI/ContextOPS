@@ -21,3 +21,17 @@ All notable ContextOps changes are tracked here.
 
 - This release is a developer preview. Adapter behavior should be validated against real local session folders before a wider launch.
 - ContextOps does not proxy model traffic, require API keys, or upload local session data by default.
+
+## Unreleased
+
+### Added
+
+- Cursor JSON and Gemini CLI nested-turn parser fixtures.
+- Replay timeline metrics for duration, max context size, context growth, event counts, retry count, and unique files read.
+- Analyzer recommendations for each waste pattern kind.
+- Web waste views with evidence and recommended next actions.
+- CLI first-run hints for empty local stores.
+
+### Changed
+
+- Generic JSON parsing now expands common nested session containers while preserving complete turns as single messages.

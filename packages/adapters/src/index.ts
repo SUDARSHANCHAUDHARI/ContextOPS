@@ -386,7 +386,7 @@ const parseGenericSession = (profile: AdapterProfile, path: string): ParsedSessi
   const warnings: ParseWarning[] = [];
   const raw = safeReadFile(path, warnings);
   const format = detectFormat(path, raw);
-  const records = parseRecords(raw, format, warnings, path);
+  const records = expandGenericRecords(parseRecords(raw, format, warnings, path));
   const messages = recordsToMessages(profile, records, raw, warnings);
   const tokenEstimate = combineTokenEstimates(messages.map((message) => message.tokenEstimate));
   const startedAt = messages[0]?.createdAt ?? nowIso();
@@ -407,6 +407,49 @@ const parseGenericSession = (profile: AdapterProfile, path: string): ParsedSessi
   };
   session.replayEvents = buildTimeline(session);
   return session;
+};
+
+const expandGenericRecords = (records: Record<string, unknown>[]) => {
+  const output: Record<string, unknown>[] = [];
+  const visit = (value: unknown, inherited: Record<string, unknown> = {}) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => visit(item, inherited));
+      return;
+    }
+    if (!isRecord(value)) return;
+    const nextInherited = {
+      ...inherited,
+      cwd: value.cwd ?? inherited.cwd,
+      workspace: value.workspace ?? inherited.workspace,
+      projectPath: value.projectPath ?? inherited.projectPath,
+      sessionId: value.sessionId ?? value.id ?? inherited.sessionId,
+      conversationId: value.conversationId ?? inherited.conversationId,
+      model: value.model ?? value.modelName ?? inherited.model,
+    };
+    const nestedKeys = ["messages", "turns", "entries", "items", "events", "conversation"];
+    const contentKeys = ["candidates", "parts", "content", "contents"];
+    const hasNested = nestedKeys.some((key) => Array.isArray(value[key]) || isRecord(value[key]));
+    const hasNestedContent = contentKeys.some(
+      (key) => Array.isArray(value[key]) || isRecord(value[key]),
+    );
+    if (isMessageLike(value)) {
+      output.push({ ...nextInherited, ...value });
+      return;
+    }
+    if (!hasNested && !hasNestedContent) output.push({ ...nextInherited, ...value });
+    for (const key of nestedKeys) {
+      const nested = value[key];
+      if (Array.isArray(nested)) nested.forEach((item) => visit(item, nextInherited));
+      else if (isRecord(nested)) visit(nested, nextInherited);
+    }
+    for (const key of contentKeys) {
+      const nested = value[key];
+      if (Array.isArray(nested)) nested.forEach((item) => visit(item, nextInherited));
+      else if (isRecord(nested)) visit(nested, nextInherited);
+    }
+  };
+  records.forEach((record) => visit(record));
+  return output;
 };
 
 const safeReadFile = (path: string, warnings: ParseWarning[]) => {
@@ -642,6 +685,8 @@ const extractContent = (record: Record<string, unknown>): string => {
     record.output ??
     record.arguments ??
     record.input ??
+    record.parts ??
+    record.path ??
     record.delta;
   if (Array.isArray(content)) return content.map(contentBlockToText).filter(Boolean).join("\n");
   if (isRecord(content)) return extractContent(content) || stringifyValue(content);
@@ -662,12 +707,19 @@ const contentBlockToText = (block: unknown): string => {
 
 const extractUsage = (...records: Record<string, unknown>[]) => {
   for (const record of records) {
-    const usage = isRecord(record.usage) ? record.usage : record;
+    const usage = isRecord(record.usage)
+      ? record.usage
+      : isRecord(record.usageMetadata)
+        ? record.usageMetadata
+        : isRecord(record.tokenUsage)
+          ? record.tokenUsage
+          : record;
     const inputTokens = numberValue(
       usage.input_tokens ??
         usage.inputTokens ??
         usage.prompt_tokens ??
         usage.promptTokens ??
+        usage.promptTokenCount ??
         usage.cache_creation_input_tokens ??
         usage.cacheReadInputTokens,
     );
@@ -675,9 +727,12 @@ const extractUsage = (...records: Record<string, unknown>[]) => {
       usage.output_tokens ??
         usage.outputTokens ??
         usage.completion_tokens ??
-        usage.completionTokens,
+        usage.completionTokens ??
+        usage.candidatesTokenCount,
     );
-    const totalTokens = numberValue(usage.total_tokens ?? usage.totalTokens ?? usage.tokens);
+    const totalTokens = numberValue(
+      usage.total_tokens ?? usage.totalTokens ?? usage.totalTokenCount ?? usage.tokens,
+    );
     if (inputTokens + outputTokens + totalTokens > 0) {
       return totalTokens > 0 && inputTokens + outputTokens === 0
         ? { inputTokens: totalTokens, outputTokens: 0 }
@@ -686,6 +741,26 @@ const extractUsage = (...records: Record<string, unknown>[]) => {
   }
   return { inputTokens: 0, outputTokens: 0 };
 };
+
+const isMessageLike = (record: Record<string, unknown>) =>
+  Boolean(
+    record.role ??
+    record.author ??
+    textualValue(record.content) ??
+    record.text ??
+    record.prompt ??
+    record.response ??
+    record.output ??
+    record.input ??
+    record.parts ??
+    record.functionCall ??
+    record.functionResponse ??
+    record.inputTokens ??
+    record.outputTokens,
+  );
+
+const textualValue = (value: unknown) =>
+  typeof value === "string" || Array.isArray(value) ? value : undefined;
 
 const isTokenOnlyRecord = (record: Record<string, unknown>) => {
   const type = stringifyValue(record.type ?? record.event);
@@ -705,6 +780,8 @@ const isMetadataOnlyRecord = (record: Record<string, unknown>) => {
 
 const inferToolName = (record: Record<string, unknown>) => {
   const content = record.content;
+  if (isRecord(record.functionCall)) return stringifyValue(record.functionCall.name);
+  if (isRecord(record.functionResponse)) return stringifyValue(record.functionResponse.name);
   if (!Array.isArray(content)) return "";
   return (
     content
@@ -748,5 +825,8 @@ const numberValue = (value: unknown): number =>
 const roleValue = (value: unknown): ParsedMessage["role"] => {
   if (value === "user" || value === "assistant" || value === "system" || value === "tool")
     return value;
+  if (value === "human") return "user";
+  if (value === "model" || value === "ai") return "assistant";
+  if (value === "function" || value === "function_call" || value === "tool_result") return "tool";
   return "unknown";
 };
