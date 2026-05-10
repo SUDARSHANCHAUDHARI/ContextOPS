@@ -133,8 +133,12 @@ ContextOps defaults to:
 
 ## Contributing
 
-Contributions must follow the clean-room rules in `docs/CLEAN_ROOM_RULES.md`. Do not copy code, wording, UI layouts, architecture diagrams, naming systems, or branding from other AI observability or coding tools.
+Contributions must follow `CONTRIBUTING.md` and the clean-room rules in `docs/CLEAN_ROOM_RULES.md`. Do not copy code, wording, UI layouts, architecture diagrams, naming systems, or branding from other AI observability or coding tools.
 
 ## Launch Status
 
 ContextOps is preparing for a v0.1.0 developer preview. The current milestone is intended for local-first evaluation, adapter hardening, and workflow intelligence feedback before broader distribution.
+
+## License
+
+MIT

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Local-first workflow intelligence for AI coding tools.",
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@9.15.4",
   "engines": {

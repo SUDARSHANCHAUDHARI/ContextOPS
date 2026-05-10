@@ -1,0 +1,57 @@
+name: Bug report
+description: Report a ContextOps bug using redacted or synthetic data.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include private prompts, secrets, file contents, or raw session logs. Use redacted or synthetic examples.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Which ContextOps version or commit are you using?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Adapters
+        - Analyzer
+        - Replay
+        - Storage
+        - CLI
+        - TUI
+        - Web dashboard
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Use redacted or synthetic data only.
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Redacted logs or output
+      render: shell
+    validations:
+      required: false

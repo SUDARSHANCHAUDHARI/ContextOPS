@@ -1,18 +1,27 @@
 # Security Policy
 
-ContextOps reads local AI coding session files and stores normalized metadata in local SQLite.
+ContextOps is local-first software that scans developer machine artifacts. Security and privacy reports are taken seriously.
 
-## Reporting
+## Supported Versions
 
-Please report security issues privately before opening public issues.
+The current developer preview is `0.1.x`. Security fixes will target the latest released version unless a broader patch is required.
 
-## Defaults
+## Reporting a Vulnerability
 
-- Telemetry is disabled.
-- Cloud sync is not implemented.
-- API keys are not required.
-- Local parser warnings should not include full secret values.
+Please do not open a public issue for a suspected vulnerability involving sensitive local data, path disclosure, unsafe parsing, or secret exposure.
 
-## Sensitive Data
+Report privately through GitHub Security Advisories for this repository. Include:
 
-Session files may contain prompts, code snippets, paths, command output, or tool results. Treat exported JSON and CSV reports as potentially sensitive.
+- affected version or commit
+- operating system
+- adapter or command involved
+- reproduction steps using redacted or synthetic data
+- expected and actual behavior
+
+## Privacy Expectations
+
+ContextOps should not upload local session data by default. Any issue that causes local logs, prompts, file paths, tokens, or database contents to leave the machine unexpectedly should be treated as security-sensitive.
+
+## Parser Safety
+
+Adapters should fail closed with warnings rather than crashes. Malformed logs, huge files, path traversal attempts, and unexpected encodings should not break scans or expose data outside configured local paths.
