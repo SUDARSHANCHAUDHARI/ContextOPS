@@ -2,8 +2,15 @@ import { getSessionData, parseEvidence, recommendationForWaste } from "../../dat
 
 export const dynamic = "force-dynamic";
 
-export default async function SessionPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function SessionPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ kind?: string }>;
+}) {
   const { id } = await params;
+  const { kind } = await searchParams;
   const session = getSessionData(id) as
     | (Record<string, unknown> & {
         messages?: unknown[];
@@ -18,9 +25,13 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
       </section>
     );
   }
-  const events = (session.replayEvents ?? []) as Record<string, unknown>[];
+  const allEvents = (session.replayEvents ?? []) as Record<string, unknown>[];
+  const events = kind ? allEvents.filter((event) => String(event.kind) === kind) : allEvents;
   const messages = (session.messages ?? []) as Record<string, unknown>[];
   const waste = (session.waste ?? []) as Record<string, unknown>[];
+  const kinds = [...new Set(allEvents.map((event) => String(event.kind)))];
+  const maxContext = allEvents.reduce((max, event) => Math.max(max, Number(event.tokens ?? 0)), 0);
+  const uniqueFiles = new Set(allEvents.map((event) => event.file_path).filter(Boolean)).size;
   return (
     <>
       <header className="header">
@@ -35,9 +46,25 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
         <Metric label="Cost" value={`$${Number(session.estimatedUsd ?? 0).toFixed(4)}`} />
         <Metric label="Messages" value={messages.length} />
         <Metric label="Events" value={events.length} />
+        <Metric label="Unique files" value={uniqueFiles} />
+        <Metric label="Largest turn" value={maxContext.toLocaleString()} />
       </section>
       <section className="section panel">
         <h2>Timeline</h2>
+        <div className="row">
+          <a className="pill" href={`/sessions/${String(session.id)}`}>
+            all
+          </a>
+          {kinds.map((eventKind) => (
+            <a
+              className={`pill ${eventKind === kind ? "active-pill" : ""}`}
+              href={`/sessions/${String(session.id)}?kind=${eventKind}`}
+              key={eventKind}
+            >
+              {eventKind}
+            </a>
+          ))}
+        </div>
         <div className="stack">
           {events.map((event) => (
             <div key={String(event.id)}>

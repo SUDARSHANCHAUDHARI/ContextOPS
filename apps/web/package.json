@@ -12,6 +12,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@contextops/config": "workspace:*",
     "@contextops/storage": "workspace:*",
     "hono": "^4.6.16",
     "next": "^15.1.4",
