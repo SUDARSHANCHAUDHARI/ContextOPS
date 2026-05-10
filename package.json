@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "pnpm clean && turbo run build --force",
+    "cli": "tsx apps/cli/src/index.ts",
     "clean": "node scripts/clean.mjs",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",

@@ -1,0 +1,56 @@
+{
+  "sessionId": "cursor-demo-001",
+  "tool": "cursor",
+  "project": {
+    "name": "contextops-demo",
+    "path": "/demo/contextops"
+  },
+  "turns": [
+    {
+      "id": "cursor-turn-001",
+      "timestamp": "2026-05-10T10:10:00.000Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Find why the replay view is noisy."
+        },
+        {
+          "role": "assistant",
+          "content": "I will compare event kinds and filter repeated low-signal entries.",
+          "model": "claude-3-7-sonnet",
+          "usage": {
+            "inputTokens": 2100,
+            "outputTokens": 260
+          }
+        }
+      ],
+      "toolCalls": [
+        {
+          "name": "read_file",
+          "path": "apps/web/app/replay/page.tsx",
+          "status": "success"
+        },
+        {
+          "name": "read_file",
+          "path": "apps/web/app/replay/page.tsx",
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "id": "cursor-turn-002",
+      "timestamp": "2026-05-10T10:15:00.000Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Replay filters should default to all event kinds while preserving drilldown controls.",
+          "model": "claude-3-7-sonnet",
+          "usage": {
+            "inputTokens": 3900,
+            "outputTokens": 340
+          }
+        }
+      ]
+    }
+  ]
+}

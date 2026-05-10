@@ -23,6 +23,8 @@ pnpm build
 
 ## Quick Start
 
+For the full walkthrough, see `docs/QUICKSTART.md`.
+
 Run the local verification suite:
 
 ```bash
@@ -32,9 +34,17 @@ pnpm verify
 Inspect available AI coding tool data:
 
 ```bash
-pnpm --filter @contextops/cli dev -- tools
-pnpm --filter @contextops/cli dev -- scan
-pnpm --filter @contextops/cli dev -- summary
+pnpm cli tools
+pnpm cli scan
+pnpm cli summary
+```
+
+Try the synthetic examples:
+
+```bash
+CONTEXTOPS_HOME=.contextops-demo pnpm cli reset
+CONTEXTOPS_HOME=.contextops-demo pnpm cli scan --provider codex-cli --path ./examples/sample-logs/codex-session.jsonl
+CONTEXTOPS_HOME=.contextops-demo pnpm cli waste
 ```
 
 Launch the local dashboard:
@@ -69,7 +79,7 @@ pnpm lint
 pnpm build
 pnpm smoke
 pnpm --filter @contextops/web dev
-pnpm --filter @contextops/cli dev -- summary
+pnpm cli summary
 ```
 
 ## Configuration
@@ -113,6 +123,8 @@ Screenshots will live here once launch captures are finalized:
 - Waste analysis
 - TUI dashboard
 
+Safe synthetic fixtures for screenshots and onboarding live in `examples/`.
+
 ## Local-First Philosophy
 
 ContextOps defaults to:
@@ -130,6 +142,10 @@ ContextOps defaults to:
 - v0.1.0: local scan, parsing, storage, CLI summaries, replay timelines, waste detection, dashboard scaffold.
 - v0.2.0: stronger adapter fixtures, richer replay navigation, project rollups, model switching analytics, and budget alerts.
 - v0.3.0: IDE-native overlays, prompt optimization recommendations, workflow graph visualization, and opt-in team analytics.
+
+## Launch Checklist
+
+See `docs/LAUNCH_CHECKLIST.md` for the current verification and release checklist.
 
 ## Contributing
 

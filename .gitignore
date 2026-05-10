@@ -10,6 +10,7 @@ graphify-out
 # local runtime data
 .contextops
 .contextops-smoke
+.contextops-*
 *.db
 *.sqlite
 *.sqlite3
