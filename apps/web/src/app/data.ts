@@ -1,4 +1,5 @@
 import { ContextOpsStore } from "@contextops/storage";
+import { loadConfig } from "@contextops/config";
 
 export const getDashboardData = () => {
   try {
@@ -38,6 +39,32 @@ export const getSessionData = (id: string) => {
   }
 };
 
+export const getConfigData = () => {
+  try {
+    return loadConfig();
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : String(error),
+      scanPaths: [],
+      disabledAdapters: [],
+      customPricing: {},
+      budgetAlerts: [],
+      privacyMode: "strict",
+      replayRetentionDays: 90,
+      ignoredDirectories: [],
+    };
+  }
+};
+
+export const toCsv = (rows: Record<string, unknown>[]) => {
+  if (rows.length === 0) return "";
+  const columns = [...new Set(rows.flatMap((row) => Object.keys(row)))];
+  return [
+    columns.join(","),
+    ...rows.map((row) => columns.map((column) => csvCell(row[column])).join(",")),
+  ].join("\n");
+};
+
 export const parseEvidence = (value: unknown): string[] => {
   if (Array.isArray(value)) return value.map(String);
   if (typeof value !== "string" || value.length === 0) return [];
@@ -60,3 +87,8 @@ export const recommendationForWaste = (kind: unknown) =>
     tool_overuse: "Ask the agent to name the next few files or commands before broad exploration.",
   })[String(kind)] ??
   "Inspect the replay timeline and remove the largest source of repeated context.";
+
+const csvCell = (value: unknown) => {
+  const text = String(value ?? "");
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+};

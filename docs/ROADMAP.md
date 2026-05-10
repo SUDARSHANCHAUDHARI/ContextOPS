@@ -19,7 +19,7 @@
 - Project rollups.
 - Model switching analytics.
 - Budget alerts.
-- TUI interaction.
+- TUI interaction with tabbed navigation and selected-row detail.
 
 ## Phase 3
 

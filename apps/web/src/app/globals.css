@@ -142,6 +142,11 @@ a {
   font-size: 12px;
 }
 
+.active-pill {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .warn {
   color: var(--warn);
 }

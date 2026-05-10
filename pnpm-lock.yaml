@@ -116,6 +116,9 @@ importers:
 
   apps/web:
     dependencies:
+      "@contextops/config":
+        specifier: workspace:*
+        version: link:../../packages/config
       "@contextops/storage":
         specifier: workspace:*
         version: link:../../packages/storage

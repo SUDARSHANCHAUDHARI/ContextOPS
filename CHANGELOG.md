@@ -2,6 +2,15 @@
 
 All notable ContextOps changes are tracked here.
 
+## Unreleased
+
+### Added
+
+- Navigable TUI tabs for waste, sessions, projects, and models with selected-row detail.
+- Web replay event-kind filters and session-level replay metrics.
+- Settings page backed by resolved local configuration.
+- Local API endpoints for config inspection and report/session export.
+
 ## 0.1.0 - Developer Preview
 
 ### Added
