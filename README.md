@@ -147,6 +147,11 @@ ContextOps defaults to:
 
 See `docs/LAUNCH_CHECKLIST.md` for the current verification and release checklist.
 
+## Beta Testing
+
+- Use `docs/DEMO_SCRIPT.md` for a short synthetic demo.
+- Use `docs/BETA_FEEDBACK.md` to report parser drift, confusing replay output, or workflow intelligence misses without sharing private logs.
+
 ## Contributing
 
 Contributions must follow `CONTRIBUTING.md` and the clean-room rules in `docs/CLEAN_ROOM_RULES.md`. Do not copy code, wording, UI layouts, architecture diagrams, naming systems, or branding from other AI observability or coding tools.

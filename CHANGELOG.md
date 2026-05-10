@@ -2,6 +2,13 @@
 
 All notable ContextOps changes are tracked here.
 
+## Unreleased
+
+### Added
+
+- Beta feedback guide for privacy-safe parser drift and workflow intelligence reports.
+- Demo script for presenting ContextOps with synthetic fixtures and a throwaway local database.
+
 ## 0.1.3 - Quickstart And Examples
 
 ### Added
