@@ -1,0 +1,7 @@
+{"type":"summary","cwd":"/work/claude-messy","sessionId":"claude-messy-1"}
+{"type":"user","timestamp":"2026-05-10T14:00:00.000Z","message":{"role":"user","content":[{"type":"text","text":"Read src/worker.ts and explain the failed retry."}],"usage":{"input_tokens":380,"output_tokens":0}}}
+{"type":"assistant","timestamp":"2026-05-10T14:00:04.000Z","message":{"role":"assistant","model":"claude-3-7-sonnet","content":[{"type":"text","text":"I will inspect the worker."},{"type":"tool_use","name":"Read","input":{"file_path":"src/worker.ts"}}],"usage":{"input_tokens":900,"output_tokens":180}}}
+{"type":"assistant","timestamp":"2026-05-10T14:00:10.000Z","message":{"role":"assistant","model":"claude-3-7-sonnet","usage":{"input_tokens":1200,"output_tokens":220}}}
+not-json
+{"type":"user","timestamp":"2026-05-10T14:01:00.000Z","message":{"role":"user","content":"Try again after the failed tool call in src/worker.ts.","usage":{"input_tokens":600,"output_tokens":0}}}
+{"type":"assistant","timestamp":"2026-05-10T14:01:10.000Z","message":{"role":"assistant","model":"claude-3-7-sonnet","content":"The retry loop comes from src/worker.ts swallowing the error.","usage":{"input_tokens":1300,"output_tokens":260}}}

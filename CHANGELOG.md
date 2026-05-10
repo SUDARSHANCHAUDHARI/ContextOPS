@@ -6,11 +6,11 @@ All notable ContextOps changes are tracked here.
 
 ### Added
 
-- Codex malformed JSONL and Cursor nested conversation fixtures for adapter drift hardening.
+- Claude, Codex, Cursor, and Gemini adapter drift fixtures covering malformed logs and nested conversations.
 
 ### Changed
 
-- Generic session parsing now descends into nested conversation bubbles and normalizes author role aliases.
+- Generic session parsing now descends into nested conversation bubbles, carries usage metadata through nested records, handles Gemini function-call blocks, and normalizes author role aliases.
 
 ## 0.1.4 - Demo Onboarding And Beta Docs
 
