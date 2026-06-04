@@ -1,8 +1,25 @@
 # ContextOps
 
+[![Version](https://img.shields.io/badge/version-0.1.4-blue.svg)](package.json)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933.svg)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-9.15-F69220.svg)](https://pnpm.io/)
+[![Release](https://img.shields.io/badge/release-local%20developer%20preview-orange.svg)](RELEASE_MEMORY.md)
+
 ContextOps is a local-first workflow intelligence platform for AI coding tools. It helps developers understand why AI-assisted coding sessions become expensive, repetitive, or inefficient by analyzing local session artifacts, estimating token and cost impact, and building replayable timelines.
 
 The project is intentionally not a proxy, not a telemetry collector, and not a cloud service. The default data path is local SQLite, with defensive parsers for tool logs and session files.
+
+> **Status:** Local developer-preview candidate · `pnpm verify` passed · synthetic demo flow verified · package/release notes still pending
+
+## Key Technical Decisions
+
+**Local-first storage is the core product constraint.** ContextOps reads local AI tool artifacts and stores parsed session data in local SQLite instead of sending coding history to a cloud service.
+
+**Defensive parsers are preferred over brittle exact formats.** Claude Code, Codex, Cursor, and Gemini session files can drift, so adapters should warn and keep scanning instead of crashing.
+
+**Synthetic demos are part of the release path.** Safe fixture data lets the CLI, dashboard, and waste analysis be demonstrated without exposing private session logs.
+
+**`pnpm verify` is the release gate.** The command combines formatting, package checks, lint, typecheck, tests, build, smoke, release check, and pack check.
 
 ## MVP Scope
 
@@ -170,6 +187,10 @@ Contributions must follow `CONTRIBUTING.md` and the clean-room rules in `docs/CL
 ## Launch Status
 
 ContextOps is preparing for a v0.1.0 developer preview. The current milestone is intended for local-first evaluation, adapter hardening, and workflow intelligence feedback before broader distribution.
+
+## Author
+
+Built by **Sudarshan Chaudhari** — SudarshanTechLabs.
 
 ## License
 
