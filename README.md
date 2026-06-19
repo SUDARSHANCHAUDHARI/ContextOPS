@@ -190,7 +190,7 @@ ContextOps is preparing for a v0.1.0 developer preview. The current milestone is
 
 ## Author
 
-Built by **Sudarshan Chaudhari** — SudarshanTechLabs.
+Built by **[Sudarshan Chaudhari](https://github.com/SUDARSHANCHAUDHARI)** — SudarshanTechLabs.
 
 ## License
 
