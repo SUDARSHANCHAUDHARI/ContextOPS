@@ -28,28 +28,28 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^22.10.7",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.18.0",
-    "prettier": "^3.4.2",
-    "tsx": "^4.19.2",
-    "turbo": "^2.3.3",
-    "typescript": "^5.7.3",
-    "vitest": "^2.1.8"
+    "@types/node": "^22.20.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.39.5",
+    "prettier": "^3.9.5",
+    "tsx": "^4.23.1",
+    "turbo": "^2.10.4",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   },
   "dependencies": {
     "@inkjs/ui": "^2.0.0",
-    "@next/env": "^15.1.4",
-    "@types/react": "^19.0.7",
-    "better-sqlite3": "^11.8.1",
+    "@next/env": "^15.5.20",
+    "@types/react": "^19.2.17",
+    "better-sqlite3": "^11.10.0",
     "commander": "^12.1.0",
     "drizzle-orm": "^0.38.4",
-    "hono": "^4.6.16",
-    "ink": "^5.1.0",
-    "next": "^15.1.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recharts": "^2.15.0",
-    "zod": "^3.24.1"
+    "hono": "^4.12.30",
+    "ink": "^5.2.1",
+    "next": "^15.5.20",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "recharts": "^2.15.4",
+    "zod": "^3.25.76"
   }
 }
