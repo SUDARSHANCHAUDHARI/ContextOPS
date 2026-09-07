@@ -14,8 +14,8 @@
   "dependencies": {
     "@contextops/config": "workspace:*",
     "@contextops/storage": "workspace:*",
-    "hono": "^4.6.16",
-    "next": "^15.1.4",
+    "hono": "^4.12.34",
+    "next": "^15.5.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^2.15.0"
