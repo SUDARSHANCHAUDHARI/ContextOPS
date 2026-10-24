@@ -28,7 +28,7 @@ importers:
         version: 0.38.4(@types/better-sqlite3@7.6.13)(@types/react@19.2.17)(better-sqlite3@11.10.0)(react@19.2.7)
       hono:
         specifier: ^4.12.30
-        version: 4.12.30
+        version: 4.13.11
       ink:
         specifier: ^5.2.1
         version: 5.2.1(@types/react@19.2.17)(react@19.2.7)
@@ -125,7 +125,7 @@ importers:
         version: link:../../packages/storage
       hono:
         specifier: ^4.6.16
-        version: 4.12.30
+        version: 4.13.11
       next:
         specifier: ^15.1.4
         version: 15.5.20(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1516,6 +1516,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -1623,8 +1624,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.12.30:
-    resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
+  hono@4.13.11:
+    resolution: {integrity: sha512-/SMX/RQNJn7oNmFwH6DtwDqcrzZU2otm1FD6OJe2cWF6cfy/F8hq0XVBv7xW3FTJshRQwuBnXHDq2kNsdZnshg==}
     engines: {node: '>=16.9.0'}
 
   ieee754@1.2.1:
@@ -3356,7 +3357,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.12.30: {}
+  hono@4.13.11: {}
 
   ieee754@1.2.1: {}
 
