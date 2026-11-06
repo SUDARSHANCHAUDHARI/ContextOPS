@@ -15,7 +15,7 @@ const configSchema = z.object({
   disabledAdapters: z
     .array(z.enum(["claude-code", "codex-cli", "cursor", "gemini-cli"]))
     .optional(),
-  customPricing: z.record(pricingSchema).optional(),
+  customPricing: z.record(z.string(), pricingSchema).optional(),
   budgetAlerts: z
     .array(
       z.object({
